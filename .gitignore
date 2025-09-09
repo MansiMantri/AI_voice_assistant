@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment
+venv/
+ENV/
+env/
+
+# Secret file
+.env
+
+# PyCharm / VS Code / IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

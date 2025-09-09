@@ -1,0 +1,6 @@
+pyttsx3==2.90
+SpeechRecognition==3.9.0
+PyQt5==5.15.9
+pywhatkit==6.2
+wikipedia==1.4.0
+openai==0.29.0

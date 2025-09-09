@@ -1,19 +1,21 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
+*.so
 
 # Environment
+.env
 venv/
 ENV/
 env/
 
-# Secret file
-.env
-
-# PyCharm / VS Code / IDE
+# IDE / OS
 .vscode/
 .idea/
-
-# OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log

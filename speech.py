@@ -5,21 +5,16 @@ import datetime
 import wikipedia
 import webbrowser
 import smtplib
-from dotenv import load_dotenv
-import openai
+# from dotenv import load_dotenv
 import pywhatkit
-import subprocess
-import json
 
-# Load secrets from .env
-load_dotenv()
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+# Load secrets
+# load_dotenv()
 SENDER_EMAIL = os.getenv("EMAIL")
 SENDER_PASSWORD = os.getenv("EMAIL_PASSWORD")
 RECIPIENT_EMAIL = os.getenv("RECIPIENT_EMAIL")
-openai.api_key = OPENAI_API_KEY
 
-# Initialize text-to-speech engine
+# Text-to-speech
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
 engine.setProperty('voice', voices[0].id)
@@ -37,7 +32,6 @@ def take_command():
         r.pause_threshold = 1
         r.adjust_for_ambient_noise(source)
         audio = r.listen(source)
-
     try:
         print("Recognizing...")
         command = r.recognize_google(audio, language='en-in')
@@ -60,21 +54,10 @@ def send_email(content):
         print("Email error:", e)
         speak("Sorry, I was not able to send the email.")
 
-def greet_user():
-    hour = datetime.datetime.now().hour
-    if hour < 12:
-        greeting = "Good Morning!"
-    elif hour < 18:
-        greeting = "Good Afternoon!"
-    else:
-        greeting = "Good Evening!"
-    speak(f"{greeting} I am Jarvis. How can I assist you today?")
-
 def handle_command(query):
     if not query:
         return
 
-    # Wikipedia search
     if 'wikipedia' in query:
         speak("Searching Wikipedia...")
         query = query.replace("wikipedia", "")
@@ -85,7 +68,6 @@ def handle_command(query):
         except:
             speak("Sorry, I couldn't find Wikipedia results.")
 
-    # YouTube
     elif 'play' in query and 'youtube' in query:
         song = query.replace("play", "").replace("on youtube", "").strip()
         speak(f"Playing {song} on YouTube")
@@ -94,7 +76,6 @@ def handle_command(query):
         except:
             webbrowser.open(f"https://www.youtube.com/results?search_query={song.replace(' ', '+')}")
 
-    # Open website
     elif 'open' in query:
         if 'youtube' in query:
             webbrowser.open("https://youtube.com")
@@ -105,12 +86,10 @@ def handle_command(query):
         else:
             speak("Which website should I open?")
     
-    # Time
     elif 'time' in query:
         strTime = datetime.datetime.now().strftime("%H:%M")
         speak(f"The time is {strTime}")
 
-    # Send email
     elif 'email' in query or 'mail' in query:
         speak("What should I say?")
         content = take_command()
@@ -119,19 +98,11 @@ def handle_command(query):
         else:
             speak("I didn't catch the message content.") 
 
-    # Exit
     elif 'exit' in query or 'quit' in query or 'goodbye' in query:
         speak("Goodbye! Have a great day.")
         exit()
 
-    # Default: Google search
     else:
         search_query = query.replace(" ", "+")
         speak(f"Searching Google for {query}")
         webbrowser.open(f"https://www.google.com/search?q={search_query}")
-
-if __name__ == "__main__":
-    greet_user()
-    while True:
-        command = take_command()
-        handle_command(command)
